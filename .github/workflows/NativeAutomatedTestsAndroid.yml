@@ -19,9 +19,12 @@ jobs:
         steps:
             - name: "What triggered this?"
               id: trigger
-              run: echo "::set-output name=trigger::(if ${{ github.event_name == 'pull_request' }} && ${{ github.event.pull_request.head.repo.full_name == github.repository }}; then echo 'internal-pull-request';
-                  elif ${{ github.event_name == 'pull_request' }} && ${{ github.event.pull_request.head.repo.full_name != github.repository }}; then echo 'external-pull-request';
-                  else echo 'master'; fi)"
+              run:
+                  echo "::set-output name=trigger::(if ${{ github.event_name == 'pull_request' }} && ${{
+                  github.event.pull_request.head.repo.full_name == github.repository }}; then echo
+                  'internal-pull-request'; elif ${{ github.event_name == 'pull_request' }} && ${{
+                  github.event.pull_request.head.repo.full_name != github.repository }}; then echo
+                  'external-pull-request'; else echo 'master'; fi)"
             - name: "Checking-out code"
               uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # v2
               with:
@@ -29,11 +32,11 @@ jobs:
             - name: "Fetching master to compare (pull request)"
               if: github.event_name == 'pull_request'
               run:
-                  git fetch --no-tags --prune --depth=1 origin +refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
+                  git fetch --no-tags --prune --depth=1 origin +refs/heads/${{ github.base_ref
+                  }}:refs/remotes/origin/${{ github.base_ref }}
             - name: "Fetching master to compare (master push or dispatch)"
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-              run:
-                  git fetch --no-tags --prune --depth=1 origin +refs/heads/master:refs/remotes/origin/master
+              run: git fetch --no-tags --prune --depth=1 origin +refs/heads/master:refs/remotes/origin/master
             - name: "Defining cache"
               uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed # v2
               env:
@@ -69,17 +72,18 @@ jobs:
               run: node .github/scripts/set-changed-packages.js *-native
               env:
                   TRIGGER: ${{ steps.trigger.outputs.trigger }}
-            -  name: "Download Android Emulator Image"
-               run: |
-                    echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-30;google_apis;x86"
-                    echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name NATIVE_pixel_30 --device "pixel" -k 'system-images;android-30;google_apis;x86'
-                    $ANDROID_HOME/emulator/emulator -list-avds
+            - name: "Download Android Emulator Image"
+              run: |
+                  echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-30;google_apis;x86"
+                  echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name NATIVE_pixel_30 --device "pixel" -k 'system-images;android-30;google_apis;x86'
+                  $ANDROID_HOME/emulator/emulator -list-avds
             - name: "Start Mendix Environment"
               id: start_mendix_environment
               run: npm run start:native-tests-ci
               env:
                   CHANGED_PACKAGES: ${{ steps.set-changed-packages.outputs.CHANGED_PACKAGES }}
-                  CHANGED_PACKAGES_FORMATTED_FOR_LERNA: ${{ steps.set-changed-packages.outputs.CHANGED_PACKAGES_FORMATTED_FOR_LERNA }}
+                  CHANGED_PACKAGES_FORMATTED_FOR_LERNA:
+                      ${{ steps.set-changed-packages.outputs.CHANGED_PACKAGES_FORMATTED_FOR_LERNA }}
                   CI: true
             # - name: "Android Emulator"
             #   timeout-minutes: 10
@@ -91,7 +95,9 @@ jobs:
             #     $ANDROID_HOME/platform-tools/adb devices
             #     echo "Emulator started"
             - name: "Run e2e tests"
-              run: npx lerna run test:e2e:local:android --stream --concurrency 1 --scope "${{ steps.set-changed-packages.outputs.CHANGED_PACKAGES_FORMATTED_FOR_LERNA }}"
+              run:
+                  npx lerna run test:e2e:local:android --stream --concurrency 1 --scope "${{
+                  steps.set-changed-packages.outputs.CHANGED_PACKAGES_FORMATTED_FOR_LERNA }}"
             - name: "Archive test screenshot diff results"
               uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
               if: failure()
@@ -100,4 +106,4 @@ jobs:
                   path: |
                       ${{ github.workspace }}/packages/**/e2e/images/diffs/**/*.png
                       ${{ github.workspace }}/packages/**/e2e/images/actual/**/*.png
-                  if-no-files-found: continue
+                  if-no-files-found: ignore
