@@ -1,109 +1,134 @@
 name: Run native automated end-to-end tests for Android
 # todo: run different android emulators -> android version and devices
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
-    push:
-        branches: [master]
+  push:
+    branches: [ master ]
 
-    pull_request:
-        branches: [master]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-    native_automated_tests_android:
-        name: "Native automated tests for Android"
-        runs-on: macos-12
-        permissions:
-            packages: read
-            contents: read
-        steps:
-            - name: "What triggered this?"
-              id: trigger
-              run:
-                  echo "::set-output name=trigger::(if ${{ github.event_name == 'pull_request' }} && ${{
-                  github.event.pull_request.head.repo.full_name == github.repository }}; then echo
-                  'internal-pull-request'; elif ${{ github.event_name == 'pull_request' }} && ${{
-                  github.event.pull_request.head.repo.full_name != github.repository }}; then echo
-                  'external-pull-request'; else echo 'master'; fi)"
-            - name: "Checking-out code"
-              uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # v2
-              with:
-                  submodules: false
-            - name: "Fetching master to compare (pull request)"
-              if: github.event_name == 'pull_request'
-              run:
-                  git fetch --no-tags --prune --depth=1 origin +refs/heads/${{ github.base_ref
-                  }}:refs/remotes/origin/${{ github.base_ref }}
-            - name: "Fetching master to compare (master push or dispatch)"
-              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-              run: git fetch --no-tags --prune --depth=1 origin +refs/heads/master:refs/remotes/origin/master
-            - name: "Defining cache"
-              uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed # v2
-              env:
-                  cache-name: cache-node-modules
-              with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
-            - name: "Defining node version"
-              uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # v2
-              with:
-                  node-version: "16"
-            - name: Install docker
-              uses: docker-practice/actions-setup-docker@ad7bc9af6126d35e7454214e0c242ce37b354b6c
-            - name: Login to GitHub Container Registry
-              uses: docker/login-action@42d299face0c5c43a0487c477f595ac9cf22f1a7 # v1.12.0
-              with:
-                  registry: ghcr.io
-                  username: ${{ github.actor }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
-            - name: "Use specific Java version for sdkmanager to work"
-              uses: joschi/setup-jdk@f37b3738b0689ff2096f2cd914d631bcdeea7cf7
-              with:
-                  java-version: "openjdk8"
-                  architecture: "x64"
-              env:
-                  # todo: can this next var be removed?
-                  # https://github.com/actions/toolkit/issues/641#issuecomment-728963957
-                  ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
-            - name: "Installing dependencies"
-              run: npm install --legacy-peer-deps
-            - name: "Set changed packages"
-              id: set-changed-packages
-              run: node .github/scripts/set-changed-packages.js *-native
-              env:
-                  TRIGGER: ${{ steps.trigger.outputs.trigger }}
-            - name: "Download Android Emulator Image"
-              run: |
-                  echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-30;google_apis;x86"
-                  echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name NATIVE_pixel_30 --device "pixel" -k 'system-images;android-30;google_apis;x86'
-                  $ANDROID_HOME/emulator/emulator -list-avds
-            - name: "Start Mendix Environment"
-              id: start_mendix_environment
-              run: npm run start:native-tests-ci
-              env:
-                  CHANGED_PACKAGES: ${{ steps.set-changed-packages.outputs.CHANGED_PACKAGES }}
-                  CHANGED_PACKAGES_FORMATTED_FOR_LERNA:
-                      ${{ steps.set-changed-packages.outputs.CHANGED_PACKAGES_FORMATTED_FOR_LERNA }}
-                  CI: true
-            # - name: "Android Emulator"
-            #   timeout-minutes: 10
-            #   continue-on-error: true
-            #   run: |
-            #     echo "Starting emulator"
-            #     nohup $ANDROID_HOME/emulator/emulator -avd NATIVE_pixel_30 -no-audio -no-snapshot -no-window -skin 1080x1920 &
-            #     $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
-            #     $ANDROID_HOME/platform-tools/adb devices
-            #     echo "Emulator started"
-            - name: "Run e2e tests"
-              run:
-                  npx lerna run test:e2e:local:android --stream --concurrency 1 --scope "${{
-                  steps.set-changed-packages.outputs.CHANGED_PACKAGES_FORMATTED_FOR_LERNA }}"
-            - name: "Archive test screenshot diff results"
-              uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
-              if: failure()
-              with:
-                  name: test-screenshot-results
-                  path: |
-                      ${{ github.workspace }}/packages/**/e2e/images/diffs/**/*.png
-                      ${{ github.workspace }}/packages/**/e2e/images/actual/**/*.png
-                  if-no-files-found: ignore
+  mxbuild:
+    runs-on: ubuntu-22.04
+    container:
+      image: ghcr.io/mendix/widgets-resources/mxbuild:9.13.0.43286
+      ports:
+        - 8083
+    steps:
+      - name: Download test project
+        run: curl -L -o project.zip https://github.com/mendix/Native-Mobile-Resources/archive/refs/heads/main.zip
+      - name: Extract test project
+        uses: montudor/action-zip@0852c26906e00f8a315c704958823928d8018b28
+        with:
+          args: unzip -qq project.zip
+      - name: update-widgets
+        run: mx update-widgets --loose-version-check Native-Mobile-Resources-main/NativeComponentsTestProject.mpr
+      - name: Build test project
+        run: mxbuild -o automation.mda Native-Mobile-Resources-main/NativeComponentsTestProject.mpr
+      - name: Archive MDA
+        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
+        with:
+          name: mda
+          path: automation.mda
+          if-no-files-found: ignore
+#
+#
+#  native_automated_tests_android:
+#    name: "Native automated tests for Android"
+#    runs-on: macos-12
+#    permissions:
+#      packages: read
+#      contents: read
+#    steps:
+#      - name: "What triggered this?"
+#        id: trigger
+#        run:
+#          echo "::set-output name=trigger::(if ${{ github.event_name == 'pull_request' }} && ${{
+#          github.event.pull_request.head.repo.full_name == github.repository }}; then echo
+#          'internal-pull-request'; elif ${{ github.event_name == 'pull_request' }} && ${{
+#          github.event.pull_request.head.repo.full_name != github.repository }}; then echo
+#          'external-pull-request'; else echo 'master'; fi)"
+#      - name: "Checking-out code"
+#        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # v2
+#        with:
+#          submodules: false
+#      - name: "Fetching master to compare (pull request)"
+#        if: github.event_name == 'pull_request'
+#        run:
+#          git fetch --no-tags --prune --depth=1 origin +refs/heads/${{ github.base_ref
+#          }}:refs/remotes/origin/${{ github.base_ref }}
+#      - name: "Fetching master to compare (master push or dispatch)"
+#        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+#        run: git fetch --no-tags --prune --depth=1 origin +refs/heads/master:refs/remotes/origin/master
+#      - name: "Defining cache"
+#        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed # v2
+#        env:
+#          cache-name: cache-node-modules
+#        with:
+#          path: ~/.npm
+#          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+#      - name: "Defining node version"
+#        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # v2
+#        with:
+#          node-version: "16"
+#      - name: Install docker
+#        uses: docker-practice/actions-setup-docker@ad7bc9af6126d35e7454214e0c242ce37b354b6c
+#      - name: Login to GitHub Container Registry
+#        uses: docker/login-action@42d299face0c5c43a0487c477f595ac9cf22f1a7 # v1.12.0
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#      - name: "Use specific Java version for sdkmanager to work"
+#        uses: joschi/setup-jdk@f37b3738b0689ff2096f2cd914d631bcdeea7cf7
+#        with:
+#          java-version: "openjdk8"
+#          architecture: "x64"
+#        env:
+#          # todo: can this next var be removed?
+#          # https://github.com/actions/toolkit/issues/641#issuecomment-728963957
+#          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+#      - name: "Installing dependencies"
+#        run: npm install --legacy-peer-deps
+#      - name: "Set changed packages"
+#        id: set-changed-packages
+#        run: node .github/scripts/set-changed-packages.js *-native
+#        env:
+#          TRIGGER: ${{ steps.trigger.outputs.trigger }}
+#      - name: "Download Android Emulator Image"
+#        run: |
+#          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-30;google_apis;x86"
+#          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name NATIVE_pixel_30 --device "pixel" -k 'system-images;android-30;google_apis;x86'
+#          $ANDROID_HOME/emulator/emulator -list-avds
+#      - name: "Start Mendix Environment"
+#        id: start_mendix_environment
+#        run: npm run start:native-tests-ci
+#        env:
+#          CHANGED_PACKAGES: ${{ steps.set-changed-packages.outputs.CHANGED_PACKAGES }}
+#          CHANGED_PACKAGES_FORMATTED_FOR_LERNA:
+#            ${{ steps.set-changed-packages.outputs.CHANGED_PACKAGES_FORMATTED_FOR_LERNA }}
+#          CI: true
+#      # - name: "Android Emulator"
+#      #   timeout-minutes: 10
+#      #   continue-on-error: true
+#      #   run: |
+#      #     echo "Starting emulator"
+#      #     nohup $ANDROID_HOME/emulator/emulator -avd NATIVE_pixel_30 -no-audio -no-snapshot -no-window -skin 1080x1920 &
+#      #     $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+#      #     $ANDROID_HOME/platform-tools/adb devices
+#      #     echo "Emulator started"
+#      - name: "Run e2e tests"
+#        run:
+#          npx lerna run test:e2e:local:android --stream --concurrency 1 --scope "${{
+#          steps.set-changed-packages.outputs.CHANGED_PACKAGES_FORMATTED_FOR_LERNA }}"
+#      - name: "Archive test screenshot diff results"
+#        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
+#        if: failure()
+#        with:
+#          name: test-screenshot-results
+#          path: |
+#            ${{ github.workspace }}/packages/**/e2e/images/diffs/**/*.png
+#            ${{ github.workspace }}/packages/**/e2e/images/actual/**/*.png
+#          if-no-files-found: ignore
