@@ -10,12 +10,9 @@ on:
     branches: [ master ]
 
 jobs:
-  mxbuild:
+  project:
     runs-on: ubuntu-22.04
-    container:
-      image: ghcr.io/mendix/widgets-resources/mxbuild:9.13.0.43286
-      ports:
-        - 8083
+    container: ghcr.io/mendix/widgets-resources/mxbuild:9.13.0.43286
     steps:
       - name: Download test project
         run: curl -L -o project.zip https://github.com/mendix/Native-Mobile-Resources/archive/refs/heads/main.zip
@@ -25,9 +22,37 @@ jobs:
           args: unzip -qq project.zip
       - name: update-widgets
         run: mx update-widgets --loose-version-check Native-Mobile-Resources-main/NativeComponentsTestProject.mpr
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
+        with:
+          name: project
+          path: Native-Mobile-Resources-main
+  mxbuild:
+    needs: project
+    runs-on: ubuntu-22.04
+    container: ghcr.io/mendix/widgets-resources/mxbuild:9.13.0.43286
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: project
+          path: Native-Mobile-Resources-main
       - name: Build test project
         run: mxbuild -o automation.mda Native-Mobile-Resources-main/NativeComponentsTestProject.mpr
-      - run: mkdir -p android/assets && mkdir -p ios/assets
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
+        with:
+          name: mda
+          path: automation.mda
+  android:
+    needs: project
+    runs-on: ubuntu-22.04
+    container: ghcr.io/mendix/widgets-resources/mxbuild:9.13.0.43286
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: project
+          path: Native-Mobile-Resources-main
+      - name: Build test project
+        run: mxbuild -o automation.mda Native-Mobile-Resources-main/NativeComponentsTestProject.mpr
+      - run: mkdir -p android/assets
       - name: Bundle Android
         run: |
           cd Native-Mobile-Resources-main/deployment/native && \
@@ -38,6 +63,22 @@ jobs:
           --bundle-output $GITHUB_WORKSPACE/android/android.bundle \
           --assets-dest $GITHUB_WORKSPACE/android/assets/ \
           --entry-file ./index.js
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
+        with:
+          name: android
+          path: android
+  ios:
+    needs: project
+    runs-on: ubuntu-22.04
+    container: ghcr.io/mendix/widgets-resources/mxbuild:9.13.0.43286
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: project
+          path: Native-Mobile-Resources-main
+      - name: Build test project
+        run: mxbuild -o automation.mda Native-Mobile-Resources-main/NativeComponentsTestProject.mpr
+      - run: mkdir -p ios/assets
       - name: Bundle iOS
         run: |
           cd Native-Mobile-Resources-main/deployment/native && \
@@ -48,19 +89,6 @@ jobs:
           --bundle-output $GITHUB_WORKSPACE/ios/ios.bundle \
           --assets-dest $GITHUB_WORKSPACE/ios/assets/ \
           --entry-file ./index.js
-      - name: Upload artifacts
-        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
-        with:
-          name: mda
-          path: automation.mda
-      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
-        with:
-          name: mda
-          path: automation.mda
-      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
-        with:
-          name: android
-          path: android
       - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # v2
         with:
           name: ios
