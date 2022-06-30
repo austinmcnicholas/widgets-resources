@@ -42,7 +42,7 @@ beforeAll(async () => {
     await init(config, { initGlobals: false, launchApp: false });
 
     await device.launchApp({
-        newInstance: true,
+        newInstance: false,
         launchArgs: {
             detoxPrintBusyIdleResources: "YES",
             // Notifications
