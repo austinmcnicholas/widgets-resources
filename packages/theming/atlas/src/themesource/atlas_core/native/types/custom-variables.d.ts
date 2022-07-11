@@ -208,3 +208,17 @@ export interface VariablesBackgroundGradient {
     colorList?: GradientColorList[];
     opacity: number;
 }
+
+export interface VariablesGallery {
+    container?: ViewStyle;
+    dynamicItemClasses?: {
+        [key: string]: Pick<VariablesGallery, "listItem">;
+    };
+    emptyPlaceholder?: ViewStyle;
+    firstItem?: ViewStyle;
+    lastItem?: ViewStyle;
+    list?: ViewStyle;
+    listItem?: ViewStyle;
+    loadMoreButtonContainer?: ViewStyle;
+    loadMoreButtonCaption?: TextStyle;
+}

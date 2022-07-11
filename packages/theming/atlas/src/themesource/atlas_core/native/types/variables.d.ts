@@ -665,3 +665,17 @@ export interface VariablesColumnChart {
         padding?: { x: number; y: number };
     };
 }
+
+export interface VariablesGallery {
+    container?: ViewStyle;
+    dynamicItemClasses?: {
+        [key: string]: Pick<VariablesGallery, "listItem">;
+    };
+    emptyPlaceholder?: ViewStyle;
+    firstItem?: ViewStyle;
+    lastItem?: ViewStyle;
+    list?: ViewStyle;
+    listItem?: ViewStyle;
+    loadMoreButtonContainer?: ViewStyle;
+    loadMoreButtonCaption?: TextStyle;
+}
