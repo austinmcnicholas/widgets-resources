@@ -8,25 +8,16 @@
 import fetchBlob from "rn-fetch-blob";
 
 // BEGIN EXTRA CODE
-function formatPath(fileURL: string, filePath: string, fileName: string): string {
-    if (filePath && fileName) {
-        return `/${filePath}/${fileName}`;
-    }
-    if (fileName) {
-        return `/${fileName}`;
-    }
-    const urlFileName = fileURL.substring(fileURL.lastIndexOf("/") + 1);
-    if (filePath) {
-        return `/${filePath}/${urlFileName}`;
-    }
-    return `/${urlFileName}`;
+function formatPath(fileURL: string, filePath: string, fileNameOverride: string): string {
+    const fileName = fileNameOverride || fileURL.substring(fileURL.lastIndexOf("/") + 1);
+    return [filePath, fileName].filter(str => !!str).join("/");
 }
 // END EXTRA CODE
 
 /**
  * @param {string} fileURL - The file Url is required
  * @param {string} filePath - optional
- * @param {string} fileName - optional - should be with extention
+ * @param {string} fileName - optional - should be with extension
  * @returns {Promise.<boolean>}
  */
 export async function DownloadFileByURL(fileURL: string, filePath: string, fileName: string): Promise<boolean> {

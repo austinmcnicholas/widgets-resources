@@ -14,11 +14,8 @@ function formatMendixFileUrl(file: mendix.lib.MxObject): string {
     )}`;
 }
 
-function formatPath(filePath: string, fileName: string): string {
-    if (filePath) {
-        return `/${filePath}/${fileName}`;
-    }
-    return `/${fileName}`;
+function formatPath(...pathArgs: string[]): string {
+    return pathArgs.filter(arg => !!arg).join("/");
 }
 // END EXTRA CODE
 
@@ -36,7 +33,7 @@ export async function DownloadFile(file: mendix.lib.MxObject, filePath: string):
     try {
         await fetchBlob
             .config({
-                path: dirs.DownloadDir + formatPath(filePath, <string>file.get("Name"))
+                path: formatPath(dirs.DownloadDir, filePath, <string>file.get("Name"))
             })
             .fetch("GET", formatMendixFileUrl(file));
         return Promise.resolve(true);
