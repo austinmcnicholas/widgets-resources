@@ -9,9 +9,9 @@ import fetchBlob from "rn-fetch-blob";
 
 // BEGIN EXTRA CODE
 function formatMendixFileUrl(file: mendix.lib.MxObject): string {
-    return `${mx.remoteUrl}file?guid=${file.getGuid()}&changedDate=${file.get("changedDate") ?? ""}&name=${file.get(
-        "Name"
-    )}`;
+    return `${mx.remoteUrl}file?guid=${file.getGuid()}&changedDate=${
+        file.get("changedDate") ?? ""
+    }&name=${encodeURIComponent(file.get("Name"))}`;
 }
 
 function formatPath(...pathArgs: string[]): string {
