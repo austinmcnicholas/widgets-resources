@@ -8,9 +8,8 @@
 import fetchBlob from "rn-fetch-blob";
 
 // BEGIN EXTRA CODE
-function formatPath(fileURL: string, filePath: string, fileNameOverride: string): string {
-    const fileName = fileNameOverride || fileURL.substring(fileURL.lastIndexOf("/") + 1);
-    return [filePath, fileName].filter(str => !!str).join("/");
+function formatPath(...pathArgs: string[]): string {
+    return pathArgs.filter(arg => !!arg).join("/");
 }
 // END EXTRA CODE
 
@@ -25,12 +24,12 @@ export async function DownloadFileByURL(fileURL: string, filePath: string, fileN
     if (!fileURL) {
         return Promise.reject(new Error("Input parameter 'file URL' is required"));
     }
-
     const dirs = fetchBlob.fs.dirs;
     try {
+        const fileNameOverride = fileName || fileURL.substring(fileURL.lastIndexOf("/") + 1);
         await fetchBlob
             .config({
-                path: dirs.DownloadDir + formatPath(fileURL, filePath, fileName)
+                path: formatPath(dirs.DownloadDir, filePath, fileNameOverride)
             })
             .fetch("GET", fileURL);
         return Promise.resolve(true);
