@@ -8,37 +8,40 @@
 import fetchBlob from "rn-fetch-blob";
 
 // BEGIN EXTRA CODE
-function formatMendixFileUrl(file: mendix.lib.MxObject): string {
-    return `${mx.remoteUrl}file?guid=${file.getGuid()}&changedDate=${file.get("changedDate") ?? ""}&name=${file.get(
-        "Name"
-    )}`;
-}
-
-function formatPath(filePath: string, fileName: string): string {
-    if (filePath) {
+function formatPath(fileURL: string, filePath: string, fileName: string): string {
+    if (filePath && fileName) {
         return `/${filePath}/${fileName}`;
     }
-    return `/${fileName}`;
+    if (fileName) {
+        return `/${fileName}`;
+    }
+    const urlFileName = fileURL.substring(fileURL.lastIndexOf("/") + 1);
+    if (filePath) {
+        return `/${filePath}/${urlFileName}`;
+    }
+    return `/${urlFileName}`;
 }
 // END EXTRA CODE
 
 /**
- * @param {MxObject} file
+ * @param {string} fileURL - The file Url is required
  * @param {string} filePath - optional
+ * @param {string} fileName - optional - should be with extention
  * @returns {Promise.<boolean>}
  */
-export async function DownloadFile(file: mendix.lib.MxObject, filePath: string): Promise<boolean> {
+export async function DownloadFileByURL(fileURL: string, filePath: string, fileName: string): Promise<boolean> {
     // BEGIN USER CODE
-    if (!file) {
-        return Promise.reject(new Error("Input parameter 'file' is required"));
+    if (!fileURL) {
+        return Promise.reject(new Error("Input parameter 'file URL' is required"));
     }
+
     const dirs = fetchBlob.fs.dirs;
     try {
         await fetchBlob
             .config({
-                path: dirs.DownloadDir + formatPath(filePath, <string>file.get("Name"))
+                path: dirs.DownloadDir + formatPath(fileURL, filePath, fileName)
             })
-            .fetch("GET", formatMendixFileUrl(file));
+            .fetch("GET", fileURL);
         return Promise.resolve(true);
     } catch (err) {
         console.error("error", err);
