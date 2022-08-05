@@ -12,7 +12,7 @@ function formatPath(...pathArgs: string[]): string {
     return pathArgs.filter(arg => !!arg).join("/");
 }
 
-function validateFileName(name: string) {
+function sanitizeFileName(name: string) {
     return name.replace(/[<>"?:|*\/\\\u0000-\u001F\u007F]/g, "_");
 }
 // END EXTRA CODE
@@ -30,11 +30,11 @@ export async function DownloadFileByURL(fileURL: string, filePath: string, fileN
     }
     const dirs = fetchBlob.fs.dirs;
     try {
-        const fileNameOverride = fileName || fileURL.substring(fileURL.lastIndexOf("/") + 1);
-        const validFileName = validateFileName(fileNameOverride);
+        const fileNameOverride = fileName || decodeURIComponent(fileURL.substring(fileURL.lastIndexOf("/") + 1));
+        const sanitizedFileName = sanitizeFileName(fileNameOverride);
         await fetchBlob
             .config({
-                path: formatPath(dirs.DownloadDir, filePath, validFileName)
+                path: formatPath(dirs.DownloadDir, filePath, sanitizedFileName)
             })
             .fetch("GET", fileURL);
         return Promise.resolve(true);

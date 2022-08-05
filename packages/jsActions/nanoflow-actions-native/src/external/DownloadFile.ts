@@ -18,7 +18,7 @@ function formatPath(...pathArgs: string[]): string {
     return pathArgs.filter(arg => !!arg).join("/");
 }
 
-function validateFileName(name: string) {
+function sanitizeFileName(name: string) {
     return name.replace(/[<>"?:|*\/\\\u0000-\u001F\u007F]/g, "_");
 }
 // END EXTRA CODE
@@ -36,10 +36,10 @@ export async function DownloadFile(file: mendix.lib.MxObject, filePath: string):
     const dirs = fetchBlob.fs.dirs;
     try {
         const fileName = file.get("Name") as string;
-        const validFileName = validateFileName(fileName);
+        const sanitizedFileName = sanitizeFileName(fileName);
         await fetchBlob
             .config({
-                path: formatPath(dirs.DownloadDir, filePath, validFileName)
+                path: formatPath(dirs.DownloadDir, filePath, sanitizedFileName)
             })
             .fetch("GET", formatMendixFileUrl(file));
         return Promise.resolve(true);
