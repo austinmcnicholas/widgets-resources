@@ -1,4 +1,5 @@
 import { HTMLNodePreviewProps } from "../typings/HTMLNodeProps";
+import { hidePropertiesIn } from "@mendix/piw-utils-internal";
 
 type Properties = PropertyGroup[];
 
@@ -31,13 +32,50 @@ type ObjectProperties = {
     captions?: string[]; // used for customizing object grids
 };
 
-export function getProperties(_values: HTMLNodePreviewProps, defaultProperties: Properties): Properties {
-    // Do the values manipulation here to control the visibility of properties in Studio and Studio Pro conditionally.
-    /* Example
-    if (values.myProperty === "custom") {
-        delete defaultProperties.properties.myOtherProperty;
+export function getProperties(values: HTMLNodePreviewProps, defaultProperties: Properties): Properties {
+    if (values.renderMode === "plain") {
+        hidePropertiesIn(defaultProperties, values, [
+            "tagName",
+            "tagContentMode",
+            "tagUseRepeat",
+            "tagContentText",
+            "tagContentContainer",
+            "tagContentRepeatDataSource",
+            "tagContentRepeatText",
+            "tagContentRepeatContainer"
+        ]);
+
+        // manipulate plain here
+        if (values.plainUseExternalFile) {
+            hidePropertiesIn(defaultProperties, values, ["plainContent"]);
+        } else {
+            hidePropertiesIn(defaultProperties, values, ["plainExternalFilePath"]);
+        }
+    } else {
+        hidePropertiesIn(defaultProperties, values, ["plainUseExternalFile", "plainExternalFilePath", "plainContent"]);
+
+        // manipulate tag here
+        if (values.tagUseRepeat) {
+            hidePropertiesIn(defaultProperties, values, ["tagContentText", "tagContentContainer"]);
+            if (values.tagContentMode === "text") {
+                hidePropertiesIn(defaultProperties, values, ["tagContentRepeatContainer"]);
+            } else {
+                hidePropertiesIn(defaultProperties, values, ["tagContentRepeatText"]);
+            }
+        } else {
+            hidePropertiesIn(defaultProperties, values, [
+                "tagContentRepeatDataSource",
+                "tagContentRepeatText",
+                "tagContentRepeatContainer"
+            ]);
+            if (values.tagContentMode === "text") {
+                hidePropertiesIn(defaultProperties, values, ["tagContentContainer"]);
+            } else {
+                hidePropertiesIn(defaultProperties, values, ["tagContentText"]);
+            }
+        }
     }
-    */
+
     return defaultProperties;
 }
 

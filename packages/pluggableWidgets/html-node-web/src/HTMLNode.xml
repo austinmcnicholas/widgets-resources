@@ -5,10 +5,82 @@
     <icon />
     <properties>
         <propertyGroup caption="General">
-            <property key="unsafeHTML" type="textTemplate">
-                <caption>HTML Text</caption>
-                <description>Text will be sanitized to prevent XSS injections and unwanted markup.</description>
+            <property key="renderMode" type="enumeration" defaultValue="tag">
+                <caption>Render</caption>
+                <description>Render mode</description>
+                <enumerationValues>
+                    <enumerationValue key="tag">HTML Tag</enumerationValue>
+                    <enumerationValue key="plain">Plain HTML</enumerationValue>
+                </enumerationValues>
             </property>
+
+            <property key="tagName" type="string" defaultValue="div" required="false">
+                <caption>Tag</caption>
+                <description>HTML tag name to render</description>
+            </property>
+
+            <property key="tagContentMode" type="enumeration" defaultValue="container">
+                <caption>Content</caption>
+                <description>Tag content mode</description>
+                <enumerationValues>
+                    <enumerationValue key="text">Text</enumerationValue>
+                    <enumerationValue key="container">Custom</enumerationValue>
+                </enumerationValues>
+            </property>
+
+            <property key="tagUseRepeat" type="boolean" defaultValue="false">
+                <caption>Repeat</caption>
+                <description>Repeat tag for data source</description>
+            </property>
+
+            <!-- **************************** TAG CONTENT ****************************** -->
+            <!-- Text content, non-repeating -->
+            <property key="tagContentText" type="textTemplate" required="false">
+                <caption>Content</caption>
+                <description>Tag content text (non-repeating).</description>
+            </property>
+
+            <!-- Container content, non-repeating -->
+            <property key="tagContentContainer" type="widgets" required="false">
+                <caption>Node content container</caption>
+                <description>Tag content widget (non-repeating).</description>
+            </property>
+
+            <!-- Data source for repeating content -->
+            <property key="tagContentRepeatDataSource" type="datasource" required="false" isList="true">
+                <caption>Data source</caption>
+                <description>Data source to base repeated content on.</description>
+            </property>
+
+            <!-- Text content, repeating -->
+            <property key="tagContentRepeatText" type="textTemplate" required="false" dataSource="tagContentRepeatDataSource">
+                <caption>Content</caption>
+                <description>Tag content text (repeating).</description>
+            </property>
+
+            <!-- Container content, repeating -->
+            <property key="tagContentRepeatContainer" type="widgets" required="false" dataSource="tagContentRepeatDataSource">
+                <caption>Content</caption>
+                <description>Tag content widget (repeating).</description>
+            </property>
+            <!-- **************************** END TAG CONTENT ****************************** -->
+            <!-- **************************** TAG ATTRIBUTES ****************************** -->
+            <!-- TODO: add Attributes for tag mode only -->
+            <!-- **************************** END TAG ATTRIBUTES ****************************** -->
+            <!-- **************************** PLAIN HTML ****************************** -->
+            <property key="plainUseExternalFile" type="boolean" defaultValue="false">
+                <caption>Use external file</caption>
+                <description>External file url, so unsecure, much wow</description>
+            </property>
+            <property key="plainExternalFilePath" type="textTemplate" required="false">
+                <caption>External file</caption>
+                <description>Plain HTML to insert on the page</description>
+            </property>
+            <property key="plainContent" type="textTemplate" required="false">
+                <caption>HTML Content</caption>
+                <description>Plain HTML to insert on the page</description>
+            </property>
+            <!-- **************************** END PLAIN HTML ****************************** -->
         </propertyGroup>
     </properties>
 </widget>
