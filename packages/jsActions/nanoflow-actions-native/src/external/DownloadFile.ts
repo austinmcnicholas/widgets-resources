@@ -6,6 +6,7 @@
 // - the code between BEGIN EXTRA CODE and END EXTRA CODE
 // Other code you write will be lost the next time you deploy the project.
 import fetchBlob from "rn-fetch-blob";
+import { Platform } from "react-native";
 
 // BEGIN EXTRA CODE
 function formatMendixFileUrl(file: mendix.lib.MxObject): string {
@@ -37,9 +38,10 @@ export async function DownloadFile(file: mendix.lib.MxObject, filePath: string):
     try {
         const fileName = file.get("Name") as string;
         const sanitizedFileName = sanitizeFileName(fileName);
+        const baseDir = Platform.OS === "ios" ? dirs.DocumentDir : dirs.DownloadDir;
         await fetchBlob
             .config({
-                path: formatPath(dirs.DownloadDir, filePath, sanitizedFileName)
+                path: formatPath(baseDir, filePath, sanitizedFileName)
             })
             .fetch("GET", formatMendixFileUrl(file));
         return Promise.resolve(true);

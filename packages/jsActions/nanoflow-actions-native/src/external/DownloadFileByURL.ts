@@ -6,6 +6,7 @@
 // - the code between BEGIN EXTRA CODE and END EXTRA CODE
 // Other code you write will be lost the next time you deploy the project.
 import fetchBlob from "rn-fetch-blob";
+import { Platform } from "react-native";
 
 // BEGIN EXTRA CODE
 function formatPath(...pathArgs: string[]): string {
@@ -32,9 +33,10 @@ export async function DownloadFileByURL(fileURL: string, filePath: string, fileN
     try {
         const fileNameOverride = fileName || decodeURIComponent(fileURL.substring(fileURL.lastIndexOf("/") + 1));
         const sanitizedFileName = sanitizeFileName(fileNameOverride);
+        const baseDir = Platform.OS === "ios" ? dirs.DocumentDir : dirs.DownloadDir;
         await fetchBlob
             .config({
-                path: formatPath(dirs.DownloadDir, filePath, sanitizedFileName)
+                path: formatPath(baseDir, filePath, sanitizedFileName)
             })
             .fetch("GET", fileURL);
         return Promise.resolve(true);
