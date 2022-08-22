@@ -10,9 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 -   We removed next actions: SetCookie, ReadCookie, SetFavicon, ScrollToClass.
 
+## Added
+
+-   We introduced a new [Download File] action to download document files stored in Mendix to native device storage.
+-   We introduced a new [Download File By URL] action to download external files by Url to native device storage.
+
 ## [2.5.0] Nanoflow Commons - 2022-7-25
 
-### Added
+## Added
 
 -   We introduced a new set of actions:
     -   AddMilliseconds
