@@ -14,7 +14,7 @@ function formatPath(...pathArgs: string[]): string {
 }
 
 function sanitizeFileName(name: string) {
-    return name.replace(/[<>"?:|*\/\\\u0000-\u001F\u007F]/g, "_");
+    return name.replace(/[<>"?:|*/\\\u0000-\u001F\u007F]/g, "_");
 }
 // END EXTRA CODE
 
