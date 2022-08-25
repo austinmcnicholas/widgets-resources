@@ -1,4 +1,5 @@
-import { border, spacing } from "../../variables";
+import { button, border, spacing } from "../../variables";
+import { VariablesGallery } from "../../types/variables";
 /*
 
 DISCLAIMER:
@@ -8,25 +9,25 @@ To customize any core styling, copy the part you want to customize to styles/nat
 ==========================================================================
 */
 
-export const justifyPaginationLeft = {
+export const justifyPaginationLeft: VariablesGallery = {
     loadMoreButtonContainer: {
-        justifyContent: "flex-start"
+        alignSelf: "flex-start"
     }
 };
 
-export const justifyPaginationCenter = {
+export const justifyPaginationCenter: VariablesGallery = {
     loadMoreButtonContainer: {
-        justifyContent: "center"
+        alignSelf: "center"
     }
 };
 
-export const justifyPaginationRight = {
+export const justifyPaginationRight: VariablesGallery = {
     loadMoreButtonContainer: {
-        justifyContent: "flex-end"
+        alignSelf: "flex-end"
     }
 };
 
-export const listItemBorderHorizontal = {
+export const listItemBorderHorizontal: VariablesGallery = {
     listItem: {
         borderBottomWidth: border.width,
         borderTopWidth: border.width,
@@ -35,7 +36,7 @@ export const listItemBorderHorizontal = {
     }
 };
 
-export const listItemBorderVertical = {
+export const listItemBorderVertical: VariablesGallery = {
     listItem: {
         borderStartWidth: border.width,
         borderEndWidth: border.width,
@@ -44,123 +45,153 @@ export const listItemBorderVertical = {
     }
 };
 
-export const listItemBorder = {
+export const listItemBorder: VariablesGallery = {
     listItem: {
         ...listItemBorderVertical.listItem,
         ...listItemBorderHorizontal.listItem
     }
 };
 
-export const gridGapInnerSmall = {
+export const gridGapInnerSmall: VariablesGallery = {
     listItem: {
         padding: spacing.smaller
     }
 };
 
-export const gridGapInnerMedium = {
+export const gridGapInnerMedium: VariablesGallery = {
     listItem: {
         padding: spacing.regular
     }
 };
 
-export const gridGapInnerLarge = {
+export const gridGapInnerLarge: VariablesGallery = {
     listItem: {
         padding: spacing.larger
     }
 };
 
-export const gridGapOuterSmall = {
+export const gridGapOuterSmall: VariablesGallery = {
     listItem: {
         margin: spacing.smaller
     }
 };
 
-export const gridGapOuterMedium = {
+export const gridGapOuterMedium: VariablesGallery = {
     listItem: {
         margin: spacing.regular
     }
 };
 
-export const gridGapOuterLarge = {
+export const gridGapOuterLarge: VariablesGallery = {
     listItem: {
         margin: spacing.larger
     }
 };
 
-export const galleryGridAlignSelfStart = {
+export const galleryGridAlignSelfStart: VariablesGallery = {
     listItem: {
         alignSelf: "flex-start"
     }
 };
 
-export const galleryGridAlignSelfCenter = {
+export const galleryGridAlignSelfCenter: VariablesGallery = {
     listItem: {
         alignSelf: "center"
     }
 };
 
-export const galleryGridAlignSelfEnd = {
+export const galleryGridAlignSelfEnd: VariablesGallery = {
     listItem: {
         alignSelf: "flex-end"
     }
 };
 
-export const galleryGridAlignSelfStretch = {
+export const galleryGridAlignSelfStretch: VariablesGallery = {
     listItem: {
         alignSelf: "stretch"
     }
 };
 
-export const galleryGridAlignSelfBaseline = {
+export const galleryGridAlignSelfBaseline: VariablesGallery = {
     listItem: {
         alignSelf: "baseline"
     }
 };
 
-export const galleryGridFlexRow = {
+export const galleryGridFlexRow: VariablesGallery = {
     listItem: {
         flexDirection: "row"
     }
 };
 
-export const galleryGridFlexWrap = {
+export const galleryGridFlexWrap: VariablesGallery = {
     listItem: {
         flexWrap: "wrap"
     }
 };
 
-export const galleryGridJustifyContentStart = {
+export const galleryGridJustifyContentStart: VariablesGallery = {
     listItem: {
-        justifyContent: "wrap"
+        justifyContent: "flex-start"
     }
 };
 
-export const galleryGridJustifyContentCenter = {
+export const galleryGridJustifyContentCenter: VariablesGallery = {
     listItem: {
         justifyContent: "center"
     }
 };
 
-export const galleryGridJustifyContentEnd = {
+export const galleryGridJustifyContentEnd: VariablesGallery = {
     listItem: {
         justifyContent: "flex-end"
     }
 };
 
-export const galleryGridJustifyContentSpaceBetween = {
+export const galleryGridJustifyContentSpaceBetween: VariablesGallery = {
     listItem: {
         justifyContent: "space-between"
     }
 };
 
-export const galleryGridJustifyContentSpaceAround = {
+export const galleryGridJustifyContentSpaceAround: VariablesGallery = {
     listItem: {
         justifyContent: "space-around"
     }
 };
 
-export const galleryGridJustifyContentSpaceEvenly = {
+export const galleryGridJustifyContentSpaceEvenly: VariablesGallery = {
     listItem: {
         justifyContent: "space-evenly"
+    }
+};
+
+export const loadMoreButtonBackgroundSecondary: VariablesGallery = {
+    loadMoreButtonContainer: {
+        backgroundColor: button.secondary.backgroundColor
+    }
+};
+
+export const loadMoreButtonBackgroundSuccess: VariablesGallery = {
+    loadMoreButtonContainer: {
+        backgroundColor: button.success.backgroundColor
+    }
+};
+
+export const loadMoreButtonBackgroundWarning: VariablesGallery = {
+    loadMoreButtonContainer: {
+        backgroundColor: button.warning.backgroundColor
+    }
+};
+
+export const loadMoreButtonBackgroundDanger: VariablesGallery = {
+    loadMoreButtonContainer: {
+        backgroundColor: button.danger.backgroundColor
+    }
+};
+
+export const loadMoreButtonSpaceMax: VariablesGallery = {
+    loadMoreButtonContainer: {
+        width: "100%"
     }
 };

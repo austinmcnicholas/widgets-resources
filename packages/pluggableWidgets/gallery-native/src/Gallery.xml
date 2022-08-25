@@ -51,6 +51,10 @@
                 <property key="loadMoreButtonCaption" type="textTemplate" required="false">
                     <caption>Load more caption</caption>
                     <description />
+                    <translations>
+                        <translation lang="en_US">Load more</translation>
+                        <translation lang="nl_NL">Laad meer</translation>
+                    </translations>
                 </property>
                 <property key="emptyPlaceholder" type="widgets" required="false">
                     <caption>Empty placeholder</caption>

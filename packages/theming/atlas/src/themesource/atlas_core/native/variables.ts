@@ -809,7 +809,7 @@ let gallery: VariablesGallery = {
         backgroundColor: background.brandPrimary,
         borderRadius: 4
     },
-    loadMoreButtonCaption: { color: "#FFFFFF" }
+    loadMoreButtonCaption: { color: "#FFFFFF", textAlign: "center" }
 };
 
 gallery = merge(gallery, custom.gallery || ({} as any));

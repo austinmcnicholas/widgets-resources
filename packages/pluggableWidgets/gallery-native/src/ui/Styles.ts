@@ -23,5 +23,5 @@ export const defaultGalleryStyle: GalleryStyle = {
         backgroundColor: "#264AE5",
         borderRadius: 4
     },
-    loadMoreButtonCaption: { color: "#FFFFFF" }
+    loadMoreButtonCaption: { color: "#FFFFFF", textAlign: "center" }
 };

@@ -1,4 +1,4 @@
-import { expect, element, by } from "detox";
+import { expect, element, by, waitFor } from "detox";
 import { Alert } from "../../../../../detox/src/Alert";
 import { expectToMatchScreenshot, resetDevice, tapMenuItem } from "../../../../../detox/src/helpers";
 
@@ -20,6 +20,10 @@ describe("Gallery", () => {
 
     it("should load more items when press the load more items button", async () => {
         const gallery = element(by.id("galleryVertical"));
+        await waitFor(element(by.id("galleryVertical-pagination-button")))
+            .toBeVisible()
+            .whileElement(by.id("galleryVertical-list"))
+            .scroll(50, "down");
         await element(by.id("galleryVertical-pagination-button")).tap();
         await expectToMatchScreenshot(gallery);
     });

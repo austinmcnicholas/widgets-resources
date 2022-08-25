@@ -118,7 +118,7 @@ export function getPreview(values: GalleryPreviewProps, isDarkMode: boolean): St
                 {
                     type: "DropZone",
                     property: values.emptyPlaceholder,
-                    placeholder: "Empty gallery message: Place widgets here"
+                    placeholder: "No items placeholder: Place widgets here"
                 } as DropZoneProps
             ]
         } as RowLayoutProps
