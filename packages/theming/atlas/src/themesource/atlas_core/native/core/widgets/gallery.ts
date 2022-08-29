@@ -44,6 +44,10 @@ export const com_mendix_widget_native_gallery_Gallery: GalleryType = {
         // All ViewStyle properties are allowed
         ...gallery.loadMoreButtonContainer
     },
+    loadMoreButtonPressableContainer: {
+        // All ViewStyle properties are allowed
+        ...gallery.loadMoreButtonPressableContainer
+    },
     loadMoreButtonCaption: {
         // All TextStyle properties are allowed
         ...gallery.loadMoreButtonCaption

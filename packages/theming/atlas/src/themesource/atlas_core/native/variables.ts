@@ -803,13 +803,17 @@ let gallery: VariablesGallery = {
     list: {},
     listItem: { flexGrow: 1 },
     loadMoreButtonContainer: {
-        alignSelf: "center",
-        marginVertical: spacing.regular,
-        padding: spacing.small,
-        backgroundColor: background.brandPrimary,
+        alignSelf: "stretch"
+    },
+    loadMoreButtonPressableContainer: {
+        alignItems: "center",
+        backgroundColor: "#264AE5",
         borderRadius: 4
     },
-    loadMoreButtonCaption: { color: "#FFFFFF", textAlign: "center" }
+    loadMoreButtonCaption: {
+        padding: 8,
+        color: "#FFFFFF"
+    }
 };
 
 gallery = merge(gallery, custom.gallery || ({} as any));

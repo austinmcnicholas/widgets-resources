@@ -11,17 +11,22 @@ export interface GalleryStyle {
     list?: ViewStyle;
     listItem?: ViewStyle;
     loadMoreButtonContainer?: ViewStyle;
+    loadMoreButtonPressableContainer?: ViewStyle;
     loadMoreButtonCaption?: TextStyle;
 }
 
 export const defaultGalleryStyle: GalleryStyle = {
     listItem: { flexGrow: 1 },
     loadMoreButtonContainer: {
-        alignSelf: "center",
-        marginVertical: 16,
-        padding: 8,
+        alignSelf: "stretch"
+    },
+    loadMoreButtonPressableContainer: {
+        alignItems: "center",
         backgroundColor: "#264AE5",
         borderRadius: 4
     },
-    loadMoreButtonCaption: { color: "#FFFFFF", textAlign: "center" }
+    loadMoreButtonCaption: {
+        padding: 8,
+        color: "#FFFFFF"
+    }
 };

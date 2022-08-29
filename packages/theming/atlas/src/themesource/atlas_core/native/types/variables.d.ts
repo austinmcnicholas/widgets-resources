@@ -677,5 +677,6 @@ export interface VariablesGallery {
     list?: ViewStyle;
     listItem?: ViewStyle;
     loadMoreButtonContainer?: ViewStyle;
+    loadMoreButtonPressableContainer?: ViewStyle;
     loadMoreButtonCaption?: TextStyle;
 }

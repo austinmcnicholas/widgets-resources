@@ -857,5 +857,6 @@ export interface GalleryType {
     list?: ViewStyle;
     listItem?: ViewStyle;
     loadMoreButtonContainer?: ViewStyle;
+    loadMoreButtonPressableContainer?: ViewStyle;
     loadMoreButtonCaption?: TextStyle;
 }

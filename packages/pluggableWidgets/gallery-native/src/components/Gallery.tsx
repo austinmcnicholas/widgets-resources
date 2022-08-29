@@ -66,7 +66,7 @@ export const Gallery = <T extends ObjectItem>(props: GalleryProps<T>): ReactElem
             <Pressable
                 testID={`${props.name}-pagination-button`}
                 onPress={() => props.hasMoreItems && props.loadMoreItems && props.loadMoreItems()}
-                style={props.style.loadMoreButtonContainer}
+                style={props.style.loadMoreButtonPressableContainer}
             >
                 <Text style={props.style.loadMoreButtonCaption}>
                     {props.loadMoreButtonCaption && isAvailable(props.loadMoreButtonCaption)
@@ -85,6 +85,10 @@ export const Gallery = <T extends ObjectItem>(props: GalleryProps<T>): ReactElem
             <FlatList
                 {...(isScrollDirectionVertical && props.pullDown ? { onRefresh: props.pullDown } : {})}
                 ListFooterComponent={loadMoreButton}
+                ListFooterComponentStyle={{
+                    ...props.style.loadMoreButtonContainer,
+                    ...(isScrollDirectionVertical ? { marginTop: 8 } : { marginStart: 8 })
+                }}
                 refreshing={props.pullDownIsExecuting ?? false}
                 data={props.items}
                 horizontal={!isScrollDirectionVertical}

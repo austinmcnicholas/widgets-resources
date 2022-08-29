@@ -10,19 +10,19 @@ To customize any core styling, copy the part you want to customize to styles/nat
 */
 
 export const justifyPaginationLeft: VariablesGallery = {
-    loadMoreButtonContainer: {
+    loadMoreButtonPressableContainer: {
         alignSelf: "flex-start"
     }
 };
 
 export const justifyPaginationCenter: VariablesGallery = {
-    loadMoreButtonContainer: {
+    loadMoreButtonPressableContainer: {
         alignSelf: "center"
     }
 };
 
 export const justifyPaginationRight: VariablesGallery = {
-    loadMoreButtonContainer: {
+    loadMoreButtonPressableContainer: {
         alignSelf: "flex-end"
     }
 };
@@ -167,31 +167,31 @@ export const galleryGridJustifyContentSpaceEvenly: VariablesGallery = {
 };
 
 export const loadMoreButtonBackgroundSecondary: VariablesGallery = {
-    loadMoreButtonContainer: {
+    loadMoreButtonPressableContainer: {
         backgroundColor: button.secondary.backgroundColor
     }
 };
 
 export const loadMoreButtonBackgroundSuccess: VariablesGallery = {
-    loadMoreButtonContainer: {
+    loadMoreButtonPressableContainer: {
         backgroundColor: button.success.backgroundColor
     }
 };
 
 export const loadMoreButtonBackgroundWarning: VariablesGallery = {
-    loadMoreButtonContainer: {
+    loadMoreButtonPressableContainer: {
         backgroundColor: button.warning.backgroundColor
     }
 };
 
 export const loadMoreButtonBackgroundDanger: VariablesGallery = {
-    loadMoreButtonContainer: {
+    loadMoreButtonPressableContainer: {
         backgroundColor: button.danger.backgroundColor
     }
 };
 
-export const loadMoreButtonSpaceMax: VariablesGallery = {
-    loadMoreButtonContainer: {
-        width: "100%"
+export const loadMoreButtonFixedSize: VariablesGallery = {
+    loadMoreButtonPressableContainer: {
+        alignSelf: "baseline"
     }
 };
