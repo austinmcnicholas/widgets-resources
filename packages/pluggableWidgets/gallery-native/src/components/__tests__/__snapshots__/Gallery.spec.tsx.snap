@@ -8,6 +8,11 @@ exports[`Gallery rendering rendering with load more button it shouldn't render t
   <RCTScrollView
     ListEmptyComponent={[Function]}
     ListFooterComponent={null}
+    ListFooterComponentStyle={
+      Object {
+        "marginTop": 8,
+      }
+    }
     data={
       Array [
         Object {
@@ -194,6 +199,11 @@ exports[`Gallery rendering rendering with load more button renders correctly 1`]
         </Text>
       </Memo(Pressable)>
     }
+    ListFooterComponentStyle={
+      Object {
+        "marginTop": 8,
+      }
+    }
     data={
       Array [
         Object {
@@ -360,6 +370,11 @@ exports[`Gallery rendering rendering with load more button renders correctly 1`]
       </View>
       <View
         onLayout={[Function]}
+        style={
+          Object {
+            "marginTop": 8,
+          }
+        }
       >
         <View
           accessible={true}
@@ -403,6 +418,11 @@ exports[`Gallery rendering rendering with load more button renders correctly wit
         </Text>
       </Memo(Pressable)>
     }
+    ListFooterComponentStyle={
+      Object {
+        "marginTop": 8,
+      }
+    }
     data={
       Array [
         Object {
@@ -569,6 +589,11 @@ exports[`Gallery rendering rendering with load more button renders correctly wit
       </View>
       <View
         onLayout={[Function]}
+        style={
+          Object {
+            "marginTop": 8,
+          }
+        }
       >
         <View
           accessible={true}
@@ -603,6 +628,11 @@ exports[`Gallery rendering renders correctly 1`] = `
   <RCTScrollView
     ListEmptyComponent={[Function]}
     ListFooterComponent={null}
+    ListFooterComponentStyle={
+      Object {
+        "marginTop": 8,
+      }
+    }
     data={
       Array [
         Object {
@@ -779,6 +809,11 @@ exports[`Gallery rendering renders correctly with dynamic item class 1`] = `
   <RCTScrollView
     ListEmptyComponent={[Function]}
     ListFooterComponent={null}
+    ListFooterComponentStyle={
+      Object {
+        "marginTop": 8,
+      }
+    }
     data={
       Array [
         Object {
@@ -962,6 +997,11 @@ exports[`Gallery rendering renders correctly with empty list and custom placehol
   <RCTScrollView
     ListEmptyComponent={[Function]}
     ListFooterComponent={null}
+    ListFooterComponentStyle={
+      Object {
+        "marginTop": 8,
+      }
+    }
     data={Array []}
     disableVirtualization={false}
     getItem={[Function]}
