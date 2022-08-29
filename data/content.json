@@ -1102,7 +1102,7 @@
         },
         {
             "name": "DatagridDateFilter",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "items": [
                 {
                     "id": "com.mendix.widget.web.datagriddatefilter.DatagridDateFilter",
@@ -1147,7 +1147,7 @@
         },
         {
             "name": "DatagridDropdownFilter",
-            "version": "2.2.2",
+            "version": "2.2.3",
             "items": [
                 {
                     "id": "com.mendix.widget.web.datagriddropdownfilter.DatagridDropdownFilter",
@@ -1192,7 +1192,7 @@
         },
         {
             "name": "DatagridNumberFilter",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "items": [
                 {
                     "id": "com.mendix.widget.web.datagridnumberfilter.DatagridNumberFilter",
@@ -1237,7 +1237,7 @@
         },
         {
             "name": "DatagridTextFilter",
-            "version": "2.3.0",
+            "version": "2.3.2",
             "items": [
                 {
                     "id": "com.mendix.widget.web.datagridtextfilter.DatagridTextFilter",
@@ -1282,7 +1282,7 @@
         },
         {
             "name": "Datagrid",
-            "version": "2.4.1",
+            "version": "2.4.2",
             "items": [
                 {
                     "id": "com.mendix.widget.web.datagrid.Datagrid",
@@ -3558,6 +3558,11 @@
                     "group": "notifications"
                 },
                 {
+                    "id": "mobile-resources-native/permissions/RequestGenericPermission",
+                    "name": "RequestGenericPermission",
+                    "group": "permissions"
+                },
+                {
                     "id": "mobile-resources-native/platform/ChangeStatusBar",
                     "name": "ChangeStatusBar",
                     "group": "platform"
@@ -3690,13 +3695,8 @@
                     "group": "client"
                 },
                 {
-                    "id": "nanoflow-actions-native/client/IsConnected",
-                    "name": "IsConnected",
-                    "group": "client"
-                },
-                {
-                    "id": "nanoflow-actions-native/client/ReadCookie",
-                    "name": "ReadCookie",
+                    "id": "nanoflow-actions-native/client/IsConnectedToServer",
+                    "name": "IsConnectedToServer",
                     "group": "client"
                 },
                 {
@@ -3712,16 +3712,6 @@
                 {
                     "id": "nanoflow-actions-native/client/Reload",
                     "name": "Reload",
-                    "group": "client"
-                },
-                {
-                    "id": "nanoflow-actions-native/client/SetCookie",
-                    "name": "SetCookie",
-                    "group": "client"
-                },
-                {
-                    "id": "nanoflow-actions-native/client/SetFavicon",
-                    "name": "SetFavicon",
                     "group": "client"
                 },
                 {
@@ -3748,16 +3738,6 @@
                     "id": "nanoflow-actions-native/client/ToggleSidebar",
                     "name": "ToggleSidebar",
                     "group": "client"
-                },
-                {
-                    "id": "nanoflow-actions-native/datetime/AddMilliseconds",
-                    "name": "AddMilliseconds",
-                    "group": "datetime"
-                },
-                {
-                    "id": "nanoflow-actions-native/datetime/AddTime",
-                    "name": "AddTime",
-                    "group": "datetime"
                 },
                 {
                     "id": "nanoflow-actions-native/datetime/TimeBetween",
@@ -3920,11 +3900,6 @@
                     "group": "other"
                 },
                 {
-                    "id": "nanoflow-actions-native/other/ScrollToClass",
-                    "name": "ScrollToClass",
-                    "group": "other"
-                },
-                {
                     "id": "nanoflow-actions-native/other/Wait",
                     "name": "Wait",
                     "group": "other"
@@ -3933,7 +3908,7 @@
         },
         {
             "name": "nanoflow-actions-web",
-            "version": "2.2.0",
+            "version": "2.5.0",
             "items": [
                 {
                     "id": "nanoflow-actions-web/./FocusHelper",
@@ -3951,8 +3926,23 @@
                     "group": "."
                 },
                 {
+                    "id": "nanoflow-actions-web/./ReadCookie",
+                    "name": "ReadCookie",
+                    "group": "."
+                },
+                {
                     "id": "nanoflow-actions-web/./ScrollTo",
                     "name": "ScrollTo",
+                    "group": "."
+                },
+                {
+                    "id": "nanoflow-actions-web/./SetCookie",
+                    "name": "SetCookie",
+                    "group": "."
+                },
+                {
+                    "id": "nanoflow-actions-web/./SetFavicon",
+                    "name": "SetFavicon",
                     "group": "."
                 },
                 {
