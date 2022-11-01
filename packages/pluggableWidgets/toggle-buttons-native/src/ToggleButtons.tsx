@@ -21,8 +21,24 @@ export class ToggleButtons extends Component<Props> {
     render(): JSX.Element {
         const selectedIndex = this.universe.indexOf(this.props.enum.value!);
         const captions = this.universe.map(name => this.props.enum.formatter.format(name));
-        const enabled = this.props.editable !== "never" && !this.props.enum.readOnly;
+        //const enabled = this.props.editable !== "never" && !this.props.enum.readOnly;
+        let enabled;
+        switch (this.props.editable) {
+            case "default":
+                enabled = !this.props.enum.readOnly;
+                break;
+            case "editExpression":
+                enabled = this.props.editableExpression?.value;
+                break;
+            case "never":
+                enabled = false;
+                break;
+        }
 
+        let activeStyle = this.determineColorClass();
+        console.log('active style ');
+        console.log(activeStyle);
+        
         return (
             <View style={enabled ? this.styles.container : this.styles.containerDisabled} testID={this.props.name}>
                 <SegmentedControlTab
@@ -33,8 +49,11 @@ export class ToggleButtons extends Component<Props> {
                     borderRadius={this.styles.container.borderRadius}
                     tabStyle={this.styles.button}
                     tabTextStyle={this.styles.text}
-                    activeTabStyle={this.styles.activeButton}
+                    activeTabStyle={activeStyle}
                     activeTabTextStyle={this.styles.activeButtonText}
+                    tabsContainerStyle={this.styles.tabContainer} 
+
+
                 />
                 {this.props.enum.validation && (
                     <Text style={this.styles.validationMessage}>{this.props.enum.validation}</Text>
@@ -43,10 +62,30 @@ export class ToggleButtons extends Component<Props> {
         );
     }
 
+    private determineColorClass() {
+        const flag = this.props.dynamicClass.value;
+        if (flag === 'dropDownFlagOrange') {
+			return this.styles.orange;
+		} else if (flag === 'dropDownFlagRed') {
+			return this.styles.red;
+		} else if (flag === 'dropDownFlagRed') {
+			return this.styles.red;
+		} else if (flag === 'dropDownFlagRed') {
+			return this.styles.red;
+		} else if (flag === 'dropDownFlagGreen') {
+			return this.styles.green;
+		} else if (flag === 'dropDownNoFlag') {
+			return this.styles.activeButton;
+		} else if (flag === 'dropDownFlagPurple') {
+			return this.styles.purple;
+		} else {
+			return this.styles.activeButton;
+		}
+    }
+ 
     private onChange(index: number): void {
         const value = this.universe[index];
         this.props.enum.setValue(value);
-
         executeAction(this.props.onChange);
     }
 }

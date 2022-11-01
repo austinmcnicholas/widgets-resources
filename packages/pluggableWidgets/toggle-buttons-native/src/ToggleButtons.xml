@@ -14,6 +14,13 @@
                         <attributeType name="Enum"/>
                     </attributeTypes>
                 </property>
+                <property key="dynamicClass" type="attribute">
+                    <caption>Dynamic Class Attribute</caption>
+                    <description/>
+                    <attributeTypes>
+                        <attributeType name="String"/>
+                    </attributeTypes>
+                </property>
             </propertyGroup>
             <propertyGroup caption="Editability">
                 <property key="editable" type="enumeration" defaultValue="default">
@@ -21,8 +28,14 @@
                     <description/>
                     <enumerationValues>
                         <enumerationValue key="default">Default</enumerationValue>
+                        <enumerationValue key="editExpression">Expression</enumerationValue>
                         <enumerationValue key="never">Never</enumerationValue>
                     </enumerationValues>
+                </property>
+                <property key="editableExpression" type="expression" defaultValue="" required="false">
+                    <caption>Editability Expression</caption>
+                    <description />
+                    <returnType type="Boolean" />
                 </property>
             </propertyGroup>
             <propertyGroup caption="Events">
